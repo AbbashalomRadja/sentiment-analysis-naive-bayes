@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h4 class="mb-3">Pre Processing</h4>
+<p class="text-muted">
+  Langkah: cleaning → case folding → normalisasi slang → stopword removal → stemming (Sastrawi).
+  Halaman ini hanya aktif jika dataset training sudah di-upload.
+</p>
+
+{% if state.last_preprocessed_path %}
+
+  <!-- Tombol Download -->
+  <a href="{{ url_for('download_preprocessed') }}" class="btn btn-outline-secondary mb-3">
+    Download Hasil (.xlsx)
+  </a>
+
+  <!-- Bagian pilih tampilan (Preview / Detail) -->
+  <ul class="nav nav-tabs mb-3" id="preTabs">
+    <li class="nav-item">
+      <a class="nav-link {% if request.args.get('view','preview') == 'preview' %}active{% endif %}"
+         href="{{ url_for('preprocess', view='preview') }}">
+         Preview
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link {% if request.args.get('view','preview') == 'detail' %}active{% endif %}"
+         href="{{ url_for('preprocess', view='detail') }}">
+         Detail (Semua Data)
+      </a>
+    </li>
+  </ul>
+
+  {% set current_view = request.args.get('view','preview') %}
+
+  <!-- ============================= -->
+  <!--     VIEW: PREVIEW            -->
+  <!-- ============================= -->
+  {% if current_view == 'preview' %}
+
+    {% if preview_html %}
+    <div class="card">
+      <div class="card-body">
+        <h6>Preview (10 baris pertama)</h6>
+        {{ preview_html | safe }}
+      </div>
+    </div>
+    {% else %}
+      <div class="alert alert-info">Tidak ada preview tersedia.</div>
+    {% endif %}
+
+  <!-- ============================= -->
+  <!--     VIEW: DETAIL TABLE       -->
+  <!-- ============================= -->
+  {% else %}
+
+    <!-- Form pencarian & per page -->
+    <form class="row g-2 mb-3" method="get">
+      <input type="hidden" name="view" value="detail">
+
+      <div class="col-sm-6 col-md-5">
+        <input type="text" class="form-control" name="q" placeholder="Cari…" value="{{ request.args.get('q','') }}">
+      </div>
+
+      <div class="col-sm-3 col-md-2">
+        <select class="form-select" name="per_page" onchange="this.form.submit()">
+          {% for opt in [25,50,100,200,500] %}
+            <option value="{{ opt }}" {% if request.args.get('per_page','50')|int == opt %}selected{% endif %}>
+              {{ opt }} / halaman
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="col-sm-3 col-md-2">
+        <button class="btn btn-primary w-100">Terapkan</button>
+      </div>
+    </form>
+
+    <!-- Pagination top -->
+    {% if table_html %}
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <small class="text-muted">
+        Total: <strong>{{ total }}</strong> baris • 
+        Halaman <strong>{{ page }}</strong> / <strong>{{ total_pages }}</strong>
+      </small>
+
+      <div class="btn-group">
+        <a class="btn btn-sm btn-outline-secondary {% if page<=1 %}disabled{% endif %}"
+           href="{{ url_for('preprocess', view='detail', q=request.args.get('q',''), per_page=per_page, page=page-1) }}">« Prev</a>
+        <a class="btn btn-sm btn-outline-secondary {% if page>=total_pages %}disabled{% endif %}"
+           href="{{ url_for('preprocess', view='detail', q=request.args.get('q',''), per_page=per_page, page=page+1) }}">Next »</a>
+      </div>
+    </div>
+
+    <!-- Tabel detail -->
+    <div class="table-responsive">
+      {{ table_html | safe }}
+    </div>
+
+    <!-- Pagination bottom -->
+    <div class="d-flex justify-content-between align-items-center mt-2">
+      <div class="btn-group">
+        <a class="btn btn-sm btn-outline-secondary {% if page<=1 %}disabled{% endif %}"
+           href="{{ url_for('preprocess', view='detail', q=request.args.get('q',''), per_page=per_page, page=page-1) }}">« Prev</a>
+        <a class="btn btn-sm btn-outline-secondary {% if page>=total_pages %}disabled{% endif %}"
+           href="{{ url_for('preprocess', view='detail', q=request.args.get('q',''), per_page=per_page, page=page+1) }}">Next »</a>
+      </div>
+    </div>
+
+    {% else %}
+      <div class="alert alert-warning">Tidak ada data yang cocok.</div>
+    {% endif %}
+
+  {% endif %}
+
+
+{% else %}
+  <div class="alert alert-warning">
+    Belum ada hasil preprocessing. Silakan lakukan cleaning dataset terlebih dahulu.
+  </div>
+{% endif %}
+
+{% endblock %}

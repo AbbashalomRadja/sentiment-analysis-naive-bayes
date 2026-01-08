@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+<h4 class="mb-3">Data Testing</h4>
+<p class="text-muted">Upload CSV dengan kolom <code>teks</code> saja. Menggunakan model yang sudah dilatih pada halaman Training.</p>
+
+<form method="post" enctype="multipart/form-data" class="card p-3 mb-3">
+  <div class="mb-3">
+    <input class="form-control" type="file" name="file" accept=".csv" required>
+  </div>
+  <button class="btn btn-primary">Jalankan Testing</button>
+  {% if state.last_test_path %}
+    <a href="{{ url_for('download_testing') }}" class="btn btn-outline-secondary ms-2">Download Hasil (.xlsx)</a>
+  {% endif %}
+</form>
+
+{% if preview_html %}
+<div class="card">
+  <div class="card-body">
+    <h6>Preview Prediksi</h6>
+    {{ preview_html | safe }}
+  </div>
+</div>
+{% endif %}
+{% endblock %}

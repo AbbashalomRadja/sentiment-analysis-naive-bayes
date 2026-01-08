@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container" style="max-width:400px;">
+  <h3 class="mb-4 text-center">🔐 Login</h3>
+  <form method="POST">
+    <div class="mb-3">
+      <label class="form-label">Username</label>
+      <input type="text" class="form-control" name="username" required>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Password</label>
+      <input type="password" class="form-control" name="password" required>
+    </div>
+    <button type="submit" class="btn btn-primary w-100">Login</button>
+    <p class="mt-3 text-center">Belum punya akun? <a href="{{ url_for('register') }}">Daftar di sini</a></p>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,161 @@
+/* ===== Font & Layout ===== */
+body {
+  font-family: "Poppins", sans-serif;
+  background-color: #f8fafc;
+  color: #1e293b;
+  min-height: 100vh;
+  display: flex;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.app {
+  display: flex;
+  width: 100%;
+}
+
+/* ===== Sidebar ===== */
+.sidebar {
+  width: 260px;
+  background: linear-gradient(180deg, #2563eb, #1e3a8a);
+  color: white;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 3px 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar .brand {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 2rem;
+  text-align: center;
+  letter-spacing: 1px;
+  color: #fff;
+}
+
+.sidebar nav a {
+  color: #e0e7ff;
+  display: block;
+  padding: 0.8rem 1rem;
+  border-radius: 10px;
+  text-decoration: none;
+  margin-bottom: 0.5rem;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.sidebar nav a:hover,
+.sidebar nav a.active {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  transform: translateX(6px);
+}
+
+/* ===== Main Content ===== */
+.content {
+  flex: 1;
+  background-color: #f8fafc;
+  padding: 2rem 3rem;
+  overflow-y: auto;
+}
+
+/* ===== Cards ===== */
+.card {
+  border: none;
+  border-radius: 14px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  transition: all 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.08);
+}
+
+/* ===== Stat Cards ===== */
+.stat {
+  text-align: center;
+  padding: 1.2rem;
+  background: linear-gradient(135deg, #ffffff, #f1f5f9);
+  border: 1px solid #e2e8f0;
+}
+
+.stat-title {
+  font-size: 0.9rem;
+  color: #64748b;
+}
+
+.stat-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1e3a8a;
+}
+
+/* ===== Buttons ===== */
+.btn {
+  border-radius: 10px;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.btn-success {
+  background-color: #2563eb;
+  border: none;
+}
+
+.btn-success:hover {
+  background-color: #1e40af;
+}
+
+.btn-outline-secondary {
+  border: 1px solid #cbd5e1;
+  color: #1e293b;
+}
+
+.btn-outline-secondary:hover {
+  background-color: #1e40af;
+  color: white;
+  border-color: #1e40af;
+}
+
+/* ===== Tables ===== */
+.table {
+  border-radius: 10px;
+  overflow: hidden;
+  font-size: 0.95rem;
+}
+
+.table thead {
+  background-color: #2563eb;
+  color: #fff;
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) {
+  background-color: #f1f5f9;
+}
+
+/* ===== Alerts ===== */
+.alert {
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* ===== Charts ===== */
+canvas {
+  margin-top: 1rem;
+}
+
+/* ===== Scrollbar ===== */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(37, 99, 235, 0.3);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(37, 99, 235, 0.5);
+}

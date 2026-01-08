@@ -1,0 +1,49 @@
+{
+  "accuracy_str": "0.7297",
+  "accuracy_float": 0.7297297297297297,
+  "report_text": "              precision    recall  f1-score   support\n\n     negatif      0.741     0.875     0.802       232\n      netral      0.786     0.639     0.705       155\n     positif      0.500     0.386     0.436        57\n\n    accuracy                          0.730       444\n   macro avg      0.676     0.633     0.648       444\nweighted avg      0.726     0.730     0.721       444\n",
+  "metrics_data": {
+    "negatif": {
+      "precision": 0.7408759124087592,
+      "recall": 0.875,
+      "f1-score": 0.8023715415019763,
+      "support": 232.0
+    },
+    "netral": {
+      "precision": 0.7857142857142857,
+      "recall": 0.6387096774193548,
+      "f1-score": 0.7046263345195729,
+      "support": 155.0
+    },
+    "positif": {
+      "precision": 0.5,
+      "recall": 0.38596491228070173,
+      "f1-score": 0.43564356435643564,
+      "support": 57.0
+    }
+  },
+  "cm": [
+    [
+      203,
+      17,
+      12
+    ],
+    [
+      46,
+      99,
+      10
+    ],
+    [
+      25,
+      10,
+      22
+    ]
+  ],
+  "labels": [
+    "negatif",
+    "netral",
+    "positif"
+  ],
+  "cm_img": "/static/plots/cm_20260108_181255.png",
+  "timestamp": "2026-01-08T18:12:56.461058"
+}

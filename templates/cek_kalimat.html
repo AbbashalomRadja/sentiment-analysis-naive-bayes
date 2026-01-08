@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h4 class="mb-3 fw-semibold">🔍 Cek Kalimat Sentimen</h4>
+<p class="text-muted">Masukkan satu kalimat untuk mengetahui sentimennya berdasarkan model yang telah dilatih.</p>
+
+<form method="post" class="card p-3 shadow-sm mb-4 border-0">
+  <textarea name="kalimat" class="form-control mb-3" rows="3" placeholder="Tulis kalimat di sini...">{{ teks_asli }}</textarea>
+  <button class="btn btn-primary fw-semibold">
+    <i class="bi bi-search"></i> Analisis
+  </button>
+</form>
+
+{% if hasil_pred %}
+<div class="card border-0 shadow-sm p-4">
+
+  <!-- Kalimat Asli -->
+  <div class="text-center">
+    <h5 class="fw-semibold mb-2">Hasil Analisis</h5>
+    <p class="text-muted mb-1">Kalimat asli:</p>
+    <blockquote class="blockquote border-start border-3 border-primary ps-3">
+      {{ teks_asli }}
+    </blockquote>
+
+    <!-- Kalimat Bersih -->
+    <p class="text-muted small mb-2">Setelah preprocessing:</p>
+    <div class="bg-light p-2 rounded small text-muted">
+      {{ teks_bersih }}
+    </div>
+
+    <hr class="my-4">
+
+    <!-- Label Sentimen -->
+    <h5 class="mb-3">
+      Sentimen terdeteksi:
+      {% if hasil_pred == 'positif' %}
+        <span class="badge bg-success">Positif</span>
+      {% elif hasil_pred == 'negatif' %}
+        <span class="badge bg-danger">Negatif</span>
+      {% else %}
+        <span class="badge bg-secondary">Netral</span>
+      {% endif %}
+    </h5>
+  </div>
+
+</div>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,88 @@
+{% extends 'base.html' %} {% block content %}
+<h3 class="mb-3">Dashboard
+  <h3></h3> Analisis Sentimen Masyarakat Terhadap Isu Pengambilalihan Aset Pasca Gelombang Protes 2025 Dengan Metode Naive Bayes</h3>
+<div class="row g-3 mb-4">
+  <div class="col-md-6">
+    <div class="card stat">
+      <div class="card-body">
+        <div class="stat-title">Total Data Training</div>
+        <div class="stat-value">{{ state.n_train }}</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card stat">
+      <div class="card-body">
+        <div class="stat-title">Total Data Testing</div>
+        <div class="stat-value">{{ state.n_test }}</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row g-3">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-body">
+        <h6 class="mb-3">Distribusi Sentimen Data Training</h6>
+        <canvas id="trainChart" height="150"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-body">
+        <h6 class="mb-3">Distribusi Sentimen Data Testing</h6>
+        <canvas id="testChart" height="150"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% if state.last_train_acc %}
+<div class="card mt-4">
+  <div class="card-body">
+    <h6 class="mb-2">Ringkasan Training Terakhir</h6>
+    <p class="mb-1">
+      Akurasi Validasi: <strong>{{ state.last_train_acc }}</strong>
+    </p>
+    <pre class="small bg-light p-3">{{ state.last_train_report }}</pre>
+  </div>
+</div>
+{% endif %}
+
+<!-- Inject data as JSON (safe untuk Jinja + linter) -->
+<script id="dashboard-data" type="application/json">
+  {{ {
+  'train': [state.train_counts.positif|default(0, true), state.train_counts.negatif|default(0, true), state.train_counts.netral|default(0, true)],
+  'test': [state.test_counts.positif|default(0, true), state.test_counts.negatif|default(0, true), state.test_counts.netral|default(0, true)]
+  } | tojson }}
+</script>
+
+<script>
+  // Ambil JSON yang di-render server
+  const ds = JSON.parse(document.getElementById("dashboard-data").textContent);
+
+  const trainData = {
+    labels: ["Positif", "Negatif", "Netral"],
+    datasets: [{ label: "Label Asli (Training)", data: ds.train }],
+  };
+  new Chart(document.getElementById("trainChart"), {
+    type: "bar",
+    data: trainData,
+    options: {
+      plugins: { legend: { display: false } },
+      scales: { y: { beginAtZero: true } },
+    },
+  });
+
+  const testData = {
+    labels: ["Positif", "Negatif", "Netral"],
+    datasets: [{ data: ds.test }],
+  };
+  new Chart(document.getElementById("testChart"), {
+    type: "doughnut",
+    data: testData,
+  });
+</script>
+{% endblock %}

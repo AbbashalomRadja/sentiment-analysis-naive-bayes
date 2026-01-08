@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+  <h3 class="mb-3">📄 Detail Dataset: {{ dataset.filename }}</h3>
+
+  <p><b>Jumlah Data:</b> {{ dataset.total_rows }}</p>
+  <p><b>Status:</b> {{ dataset.status }}</p>
+
+  <div class="table-responsive">
+    {{ preview_html|safe }}
+  </div>
+
+  <a href="{{ url_for('upload') }}" class="btn btn-secondary mt-3">⬅ Kembali</a>
+</div>
+{% endblock %}
