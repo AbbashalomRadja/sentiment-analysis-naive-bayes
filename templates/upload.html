@@ -22,62 +22,65 @@
     <i class="bi bi-table"></i> Daftar Dataset
   </div>
   <div class="card-body bg-white">
-    <table class="table table-hover table-bordered align-middle">
-      <thead class="table-light">
-        <tr>
-          <th style="width: 5%">#</th>
-          <th>Nama File</th>
-          <th>Jumlah Data</th>
-          <th>Waktu Upload</th>
-          <th>Status</th>
-          <th style="width: 230px;">Aksi</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for ds in datasets %}
-        <tr>
-          <td>{{ loop.index }}</td>
-          <td>{{ ds.filename }}</td>
-          <td>{{ ds.total_rows }}</td>
-          <td>{{ ds.upload_time.strftime("%Y-%m-%d %H:%M:%S") if ds.upload_time else "-" }}</td>
+    <div class="table-responsive">
+      <table class="table table-hover table-bordered align-middle">
+        <thead class="table-light">
+          <tr>
+            <th style="width: 5%">#</th>
+            <th>Nama File</th>
+            <th>Jumlah Data</th>
+            <th>Waktu Upload</th>
+            <th>Status</th>
+            <th style="width: 230px;">Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for ds in datasets %}
+          <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ ds.filename }}</td>
+            <td>{{ ds.total_rows }}</td>
+            <td>{{ ds.upload_time.strftime("%Y-%m-%d %H:%M:%S") if ds.upload_time else "-" }}</td>
 
-          <!-- Badge Status -->
-          <td>
-            {% if ds.status == 'cleaned' %}
-              <span class="badge bg-success">Cleaned</span>
-            {% elif ds.status == 'raw' %}
-              <span class="badge bg-warning text-dark">Raw</span>
-            {% else %}
-              <span class="badge bg-secondary">{{ ds.status|capitalize }}</span>
-            {% endif %}
-          </td>
+            <!-- Badge Status -->
+            <td>
+              {% if ds.status == 'cleaned' %}
+                <span class="badge bg-success">Cleaned</span>
+              {% elif ds.status == 'raw' %}
+                <span class="badge bg-warning text-dark">Raw</span>
+              {% else %}
+                <span class="badge bg-secondary">{{ ds.status|capitalize }}</span>
+              {% endif %}
+            </td>
 
-          <!-- Tombol Aksi -->
-          <td class="d-flex gap-2">
-            <a href="{{ url_for('dataset_detail', id=ds.id) }}" 
-               class="btn btn-sm btn-outline-primary d-flex align-items-center gap-1">
-              <i class="bi bi-eye"></i> Detail
-            </a>
+            <!-- Tombol Aksi -->
+            <td>
+              <div class="d-flex flex-column flex-sm-row gap-2">
+                <a href="{{ url_for('dataset_detail', id=ds.id) }}" 
+                   class="btn btn-sm btn-outline-primary d-flex align-items-center justify-content-center gap-1">
+                  <i class="bi bi-eye"></i> <span class="d-none d-sm-inline">Detail</span>
+                </a>
 
-            <a href="{{ url_for('dataset_clean', id=ds.id) }}" 
-               class="btn btn-sm btn-outline-success d-flex align-items-center gap-1">
-              <i class="bi bi-brush"></i> Clean
-            </a>
+                <a href="{{ url_for('dataset_clean', id=ds.id) }}" 
+                   class="btn btn-sm btn-outline-success d-flex align-items-center justify-content-center gap-1">
+                  <i class="bi bi-brush"></i> <span class="d-none d-sm-inline">Clean</span>
+                </a>
 
-            <form method="POST" 
-                  action="{{ url_for('dataset_delete', id=ds.id) }}" 
-                  onsubmit="return confirmDelete('{{ ds.filename }}');" 
-                  style="display:inline;">
-              <button class="btn btn-sm btn-outline-danger d-flex align-items-center gap-1">
-                <i class="bi bi-trash"></i> Delete
-              </button>
-            </form>
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
+                <form method="POST" 
+                      action="{{ url_for('dataset_delete', id=ds.id) }}" 
+                      onsubmit="return confirmDelete('{{ ds.filename }}');" 
+                      style="display:inline; flex: 1;">
+                  <button class="btn btn-sm btn-outline-danger d-flex align-items-center justify-content-center gap-1 w-100">
+                    <i class="bi bi-trash"></i> <span class="d-none d-sm-inline">Delete</span>
+                  </button>
+                </form>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>  </div>
 </div>
 {% else %}
   <div class="alert alert-info mt-4 shadow-sm">

@@ -7,18 +7,21 @@
   <div class="mb-3">
     <input class="form-control" type="file" name="file" accept=".csv" required>
   </div>
-  <button class="btn btn-primary">Jalankan Testing</button>
-  {% if state.last_test_path %}
-    <a href="{{ url_for('download_testing') }}" class="btn btn-outline-secondary ms-2">Download Hasil (.xlsx)</a>
-  {% endif %}
+  <div class="d-flex flex-column flex-sm-row gap-2">
+    <button class="btn btn-primary flex-grow-1">Jalankan Testing</button>
+    {% if state.last_test_path %}
+      <a href="{{ url_for('download_testing') }}" class="btn btn-outline-secondary">Download Hasil (.xlsx)</a>
+    {% endif %}
+  </div>
 </form>
 
 {% if preview_html %}
 <div class="card">
   <div class="card-body">
     <h6>Preview Prediksi</h6>
-    {{ preview_html | safe }}
-  </div>
+    <div class="table-responsive">
+      {{ preview_html | safe }}
+    </div>  </div>
 </div>
 {% endif %}
 {% endblock %}

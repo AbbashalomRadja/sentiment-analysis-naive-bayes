@@ -10,7 +10,7 @@
 <!-- FORM TRAIN -->
 <form method="post" class="card shadow-sm border-0 p-3 mb-4">
   <div class="row g-2 align-items-end">
-    <div class="col-md-4">
+    <div class="col-12 col-md-4">
       <label class="form-label">Rasio Train / Validasi</label>
       <select class="form-select" name="split_ratio">
         <option value="0.8">80% Train / 20% Valid</option>
@@ -18,13 +18,13 @@
         <option value="0.6">60% Train / 40% Valid</option>
       </select>
     </div>
-    <div class="col-md-3 d-grid">
+    <div class="col-12 col-md-3 d-grid">
       <button class="btn btn-primary fw-semibold">
         <i class="bi bi-play-circle me-1"></i> Mulai Training
       </button>
     </div>
-    <div class="col-md-3 ms-auto text-end">
-      <span class="badge bg-secondary-subtle text-dark">
+    <div class="col-12 col-md-3 ms-md-auto mt-2 mt-md-0">
+      <span class="badge bg-secondary-subtle text-dark d-block text-center">
         Total sampel: <b>{{ n_samples }}</b>
       </span>
     </div>
@@ -33,14 +33,14 @@
 
 {% if metrics %}
 <!-- INFO SUMMARY -->
-<div class="row text-center mb-4">
-  <div class="col-md-6">
+<div class="row g-3 text-center mb-4">
+  <div class="col-12 col-sm-6">
     <div class="card shadow-sm border-0 p-3">
       <h6 class="text-muted mb-1">Akurasi</h6>
       <h4 class="text-primary fw-bold">{{ metrics.accuracy }}</h4>
     </div>
   </div>
-  <div class="col-md-6">
+  <div class="col-12 col-sm-6">
     <div class="card shadow-sm border-0 p-3">
       <h6 class="text-muted mb-1">Total Data</h6>
       <h4 class="fw-bold">{{ n_samples }}</h4>
@@ -53,7 +53,7 @@
   <div class="card-body">
     <h6 class="fw-semibold mb-2">📊 Hasil Validasi Model</h6>
     <p>Akurasi: <b>{{ metrics.accuracy }}</b></p>
-    <pre class="small bg-light p-3 rounded">{{ metrics.report_text }}</pre>
+    <pre class="small bg-light p-3 rounded" style="overflow-x: auto;">{{ metrics.report_text }}</pre>
   </div>
 </div>
 
@@ -61,7 +61,9 @@
 <div class="card shadow-sm border-0 mb-4">
   <div class="card-body">
     <h6 class="fw-semibold mb-3">📈 Visualisasi Performa Model</h6>
-    <canvas id="metricsChart" height="120"></canvas>
+    <div style="position: relative; height: 300px; width: 100%;">
+      <canvas id="metricsChart"></canvas>
+    </div>
   </div>
 </div>
 
@@ -70,7 +72,9 @@
 <div class="card shadow-sm border-0 mb-4">
   <div class="card-body">
     <h6 class="fw-semibold mb-3">🧾 Confusion Matrix (Heatmap)</h6>
-    <img src="{{ metrics.cm_img }}" alt="Confusion Matrix" class="img-fluid rounded border">
+    <div class="text-center">
+      <img src="{{ metrics.cm_img }}" alt="Confusion Matrix" class="img-fluid rounded border" style="max-width: 100%; height: auto;">
+    </div>
   </div>
 </div>
 {% endif %}
@@ -79,42 +83,45 @@
 <div class="card shadow-sm border-0 mb-4">
   <div class="card-body">
     <h6 class="fw-semibold mb-3">📅 Tren Sentimen per Minggu</h6>
+    <div style="position: relative; height: 300px; width: 100%;">
+      <canvas id="weeklyTrendChart"></canvas>
+    </div>
 
-<canvas id="weeklyTrendChart" height="120"></canvas>
+    <script>
+      const weeklyTrend = JSON.parse(`{{ state.weekly_trend | tojson | safe }}`);
+      const weekLabels = Object.keys(weeklyTrend);
 
-<script>
-  const weeklyTrend = JSON.parse(`{{ state.weekly_trend | tojson | safe }}`);
-  const weekLabels = Object.keys(weeklyTrend);
+      const positiData = weekLabels.map(w => weeklyTrend[w].positif || 0);
+      const negatifData = weekLabels.map(w => weeklyTrend[w].negatif || 0);
+      const netralData  = weekLabels.map(w => weeklyTrend[w].netral  || 0);
 
-  const positiData = weekLabels.map(w => weeklyTrend[w].positif || 0);
-  const negatifData = weekLabels.map(w => weeklyTrend[w].negatif || 0);
-  const netralData  = weekLabels.map(w => weeklyTrend[w].netral  || 0);
+      const weeklyCtx = document.getElementById('weeklyTrendChart');
 
-  const weeklyCtx = document.getElementById('weeklyTrendChart');
-
-  new Chart(weeklyCtx, {
-    type: 'line',
-    data: {
-      labels: weekLabels,
-      datasets: [
-        { label: "Positif", data: positiData, borderWidth: 2 },
-        { label: "Negatif", data: negatifData, borderWidth: 2 },
-        { label: "Netral", data:  netralData,  borderWidth: 2 }
-      ]
-    },
-    options: {
-      responsive: true,
-      plugins: { legend: { position: 'bottom' } },
-      scales: { y: { beginAtZero: true } }
-    }
-  });
-</script>
+      new Chart(weeklyCtx, {
+        type: 'line',
+        data: {
+          labels: weekLabels,
+          datasets: [
+            { label: "Positif", data: positiData, borderWidth: 2 },
+            { label: "Negatif", data: negatifData, borderWidth: 2 },
+            { label: "Netral", data:  netralData,  borderWidth: 2 }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { position: 'bottom' } },
+          scales: { y: { beginAtZero: true } }
+        }
+      });
+    </script>
+</div>
 {% endif %}
 
 
 <!-- TOMBOL AKSI -->
-<div class="mt-4 d-flex justify-content-end">
-  <a href="{{ url_for('test_page') }}" class="btn btn-primary me-2">
+<div class="mt-4 d-flex flex-column flex-sm-row gap-2 justify-content-end">
+  <a href="{{ url_for('test_page') }}" class="btn btn-primary">
     <i class="bi bi-graph-up"></i> Lanjut ke Data Testing
   </a>
   <a href="{{ url_for('preprocess') }}" class="btn btn-outline-secondary">
@@ -150,6 +157,7 @@
     },
     options: {
       responsive: true,
+      maintainAspectRatio: false,
       plugins: { legend: { position: 'bottom' } },
       scales: { y: { beginAtZero: true, max: 1 } }
     }
@@ -164,7 +172,6 @@
   </div>
 </div>
 {% endif %}
-
 
 {% endif %}
 {% endblock %}

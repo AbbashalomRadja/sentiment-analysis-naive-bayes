@@ -38,7 +38,11 @@ def get_db_connection():
 
 # === Bagian LOGIN, REGISTER, LOGOUT ===========
 app = Flask(__name__)
-app.secret_key = "super-secret-key"
+app.secret_key = "super-secret-key-sentimen-analysis-2025"
+app.config['SESSION_COOKIE_SECURE'] = False  # Set to True jika menggunakan HTTPS
+app.config['SESSION_COOKIE_HTTPONLY'] = True
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
+app.config['PERMANENT_SESSION_LIFETIME'] = 3600  # 1 jam
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -89,6 +93,7 @@ def login():
         conn.close()
 
         if user and check_password_hash(user["password_hash"], password):
+            session.permanent = True
             session["user_id"] = user["id"]
             session["username"] = user["username"]
             flash(f"Selamat datang, {user['username']}!", "success")
@@ -112,8 +117,13 @@ def require_login():
 
     # Jika belum login dan bukan di halaman yang diizinkan → redirect ke login
     if request.endpoint not in allowed_routes and "user_id" not in session:
+        flash("Silakan login terlebih dahulu.", "warning")
         return redirect(url_for("login"))
 
+@app.after_request
+def set_session_cookie(response):
+    """Memastikan session cookie selalu dikirim dengan httponly dan samesite flags."""
+    return response
 
 def login_required(f):
     @wraps(f)
