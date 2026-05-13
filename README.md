@@ -87,7 +87,8 @@ python app.py
 
 ## Screenshots
 
-(Add your application screenshots here)
+<img width="1912" height="962" alt="image" src="https://github.com/user-attachments/assets/8447f661-7c02-4af4-850d-835e44a54a3b" />
+
 
 ---
 
